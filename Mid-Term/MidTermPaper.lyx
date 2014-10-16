@@ -423,37 +423,8 @@ enumitem
 
 \begin_body
 
-\begin_layout Standard
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-% paper title
-\end_layout
-
-\end_inset
-
-
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-% can use linebreaks 
-\backslash
-
-\backslash
- within to get better formatting as desired
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Title
-Parallel breadth First Search for Scale-Free Social Network Graphs
+Parallel Breadth First Search for Scale-Free Social Network Graphs
 \end_layout
 
 \begin_layout Author
@@ -1070,10 +1041,10 @@ Challenges
 \end_layout
 
 \begin_layout Standard
-We have noticed that the PPBFS algorithm 
+We have noticed that the PPBFS algorithm
 \begin_inset CommandInset citation
 LatexCommand cite
-key "pearce:scaling"
+key "Yoo:2005:SDP:1105760.1105790"
 
 \end_inset
 
@@ -1083,28 +1054,51 @@ key "pearce:scaling"
  limit performance.
 \end_layout
 
-\begin_layout Section
-Remaining Work
-\end_layout
-
 \begin_layout Standard
-Thus far we have successfully implemented and modified the NodeXL class
- libraries to support additional properties for BFS, and implemented a sequentia
-l BFS algorithm utilizing a graph imported from Facebook with NodeXL.
- We have also implemented a sequential version of the PPBFS Algorithm.
+The benchmark files have been created for both Facebook and GDBench, but
+ both benchmarks produce graphs with disjoint vertices.
+ Disjoint graphs with BFS won’t allow the algorithm to visit all the nodes
+ in the graph.
+ We are currently attempting to make the graphs larger while still maintaining
+ connectivity.
  
 \end_layout
 
-\begin_layout Enumerate
-Finish the parallelization modifications to the PPBFS Algorithm
+\begin_layout Subsection*
+Completed work:
 \end_layout
 
 \begin_layout Enumerate
-Implement the MTBFS Algorithm
+Thus far we have successfully implemented and modified the NodeXL class
+ libraries (used for scale-free graph creation) to support additional properties
+ for BFS
 \end_layout
 
 \begin_layout Enumerate
-Execute the algorithms 
+Implemented a sequential BFS algorithm capable of running on a graph imported
+ from Facebook with NodeXL.
+\end_layout
+
+\begin_layout Enumerate
+We have also implemented a sequential version of the PPBFS Algorithm.
+\end_layout
+
+\begin_layout Subsection*
+Remaining work:
+\end_layout
+
+\begin_layout Enumerate
+Resolve disjoint sets in the benchmarks, so all vertices in the graph are
+ connected.
+\end_layout
+
+\begin_layout Enumerate
+Finish the parallelization modifications to the PPBFS Algorithm Implement
+ the MTBFS Algorithm
+\end_layout
+
+\begin_layout Enumerate
+Execute the algorithms and collect experimental results 
 \end_layout
 
 \begin_layout Standard
