@@ -783,6 +783,174 @@ The original algorithm used as a reference for our project was implemented
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+small
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+PPBFS from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\textrm{Initialize}\ L_{v_{s}}\left(v\right)=\begin{cases}
+0, & v=v_{s},\textrm{where}\ v_{s}\ \textrm{is\ a\ source}\\
+\infty & \textrm{otherwise}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{for}\ l\ =0\ to\ \infty\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ F\ \leftarrow\ \left\{ v\mid L_{v_{s}}\left(v\right)=l\right\} ,\ \textrm{the\ set\ of\ local\ vertices\ with\ level}\ l$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{if}\ F\ =\ \emptyset\ \textrm{for\ all\ processors}\ \mathbf{then}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \textrm{Terminate\ main\ loop}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ if}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ N\ \leftarrow\ \left\{ \textrm{neighbors\ of\ vertices\ in}\ F\ \left(\textrm{not\ necessarily\ local}\right)\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{for\ all}\ \textrm{processors}\ q\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ N_{q}\ \leftarrow\ \left\{ \textrm{vertices\ in}\ N\ \textrm{owned\ by\ processor}\ q\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \mathbf{Send}\ N_{q}\ \textrm{to\ processor}\ q$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \mathbf{Receive}\ \bar{N}_{q}\ \textrm{from\ processor}\ q$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \bar{N\ }\leftarrow\ \bigcup_{q}\bar{N}_{q}\ \left(\textrm{The}\ \bar{N}_{q}\ m\textrm{ay\ overlap}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{for}\ v\ \in\bar{N}\ \textrm{and}\ L_{v_{s}}\left(v\right)\ =\ \infty\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ L_{v_{s}}\left(v\right)\ \leftarrow\ l\ +\ 1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The implementation is slightly different than the general approach to performing
  a BFS.
  It starts by partitioning the graph equally between the available threads.
