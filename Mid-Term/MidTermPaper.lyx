@@ -518,7 +518,7 @@ University of Central Florida
 
 \begin_layout Abstract
 Graphical representations are one of the most commonly used abstractions
- to represent large networks.
+ to model large networks.
  Social media networks like Facebook and Twitter contain massive scale free
  networks with billions of nodes.
  The scale free nature of the connections between nodes presents several
@@ -526,7 +526,6 @@ Graphical representations are one of the most commonly used abstractions
  In this paper, we present two implementations of Parallel Breadth First
  Search algorithms on scale free networks without the use of specialized
  hardware.
- 
 \end_layout
 
 \begin_layout Section
@@ -567,13 +566,14 @@ key "Bader:2006:DMA:1156433.1157602"
 \end_inset
 
 .
- Our research is targeted at the implementation of two 
+ Our research is targeted at the implementation of two.
+ 
 \end_layout
 
 \begin_layout Standard
 Parallel Breadth First Search algorithms without the use of specialized
  hardware on scale free networks.
- The first algorithm Parallel Breadth First Search with Partitioning (PPBFS)
+ The first algorithm, Parallel Breadth First Search with Partitioning (PPBFS),
  was originally designed to improve BFS performance in distributed memory
  architectures used by many modern supercomputers.
  Our implementation will specifically apply this solution to scale free
@@ -583,9 +583,16 @@ Parallel Breadth First Search algorithms without the use of specialized
 \end_layout
 
 \begin_layout Standard
-The second Parallel Breadth First Search algorithm (MTBFS) we will implement
- is designed to support fine-grained, low overhead synchronization in a
- massively multithreaded system [1].
+The second algorithm we will implement, Multithreaded Breadth First Search
+ (MTBFS), is designed to support fine-grained, low overhead synchronization
+ in a massively multithreaded system 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+.
  This algorithm will be used for gauging the performance of PPBFS, as MTBFS
  was intended to support scale free graphs.
  Since the focus of MTBFS is on increased parallelism through multi threading,
@@ -627,13 +634,20 @@ Related Work
 \end_layout
 
 \begin_layout Subsection*
-A Scalable Distributed Parallel Breadth-First Search Algorithm on BlueGene/L
+A Scalable Distributed Parallel Breadth First Search Algorithm on BlueGene/L
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 This paper talks about searching networks that are too large to fit into
  memory of a single machine.
- To handle this, divides the graph into partition where each node processes
+ To handle this, it divides the graph into partitions where each node processes
  a set of vertices assigned to it.
  If it finds a vertex that does not belong to it, the node that owns it
  is notified.
@@ -644,8 +658,15 @@ This paper talks about searching networks that are too large to fit into
 \end_layout
 
 \begin_layout Subsection*
-Designing Multithreaded Algorithms for Breath_First search and st-connectivity
+Designing Multithreaded Algorithms for Breath First search and st-connectivity
  on the Cray MTA-2
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bader:2006:DMA:1156433.1157602"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -661,13 +682,20 @@ The Multithreaded BFS algorithm implemented by Bader and Madduri will serve
 \end_layout
 
 \begin_layout Subsection*
-Parallel Breadth-First Search on Distributed Memory Systems
+Parallel Breadth First Search on Distributed Memory Systems
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Buluc:2011:PBS:2063384.2063471"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-The partitioning Parallel Breadth-First Search algorithm for distributed
+The partitioning Parallel Breadth First Search algorithm for distributed
  memory systems implemented by Buluc and Madduri extends the research performed
- by Yoo on the Scalable Distributed Parallel Breadth-First Search, and highlight
+ by Yoo on the Scalable Distributed Parallel Breadth First Search, and highlight
 s inefficiencies in the supporting structure of the other research.
  This research provided prior work summaries and criticism on the two algorithms
  we will adopt, but implementing the improvements made here is outside the
@@ -684,13 +712,13 @@ Our projects technical approach will focus on comparing three versions of
  The original implementations of our two parallel BFS algorithms were intended
  for use on super-computing hardware.
  The reason we have implemented two versions of parallel BFS algorithms
- is to in the performance of the algorithms when they are abstracted away
- from their specialized hardware.
+ is to allow for additional performance comparisons of the algorithms, since
+ they are both abstracted away from their specialized hardware.
  Accordingly we believe that the PPBFS algorithm’s performance will be the
  most dependent on the hardware, and the MTBFS algorithm will be more hardware
  agnostic.
  These parallel algorithms will both have their performance compared with
- a traditional sequential implementation of BFS.
+ a traditional sequential implementation of BFS
 \end_layout
 
 \begin_layout Standard
@@ -785,7 +813,7 @@ small
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-PPBFS from 
+Distributed Breadth First expansion with 1D Partitioning
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Yoo:2005:SDP:1105760.1105790"
@@ -1001,38 +1029,124 @@ ng nodes is done in parallel.
  In detail, the algorithm works as follows:
 \end_layout
 
-\begin_layout Itemize
-Initialize all nodes in the graph to negative 1
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
 \end_layout
 
-\begin_layout Itemize
-Set source node to zero, clear the queue, and enqueue source node
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Level-synchronized Parallel BFS
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bader:2006:DMA:1156433.1157602"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-In parallel, loop through all nodes in the queue
+\end_inset
+
+
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Dequeue head node u
+\begin_layout Enumerate
+\begin_inset Formula $for\ all\_v\ \in\ V\ in\ parallel\ do$
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-In parallel, loop through all neighbors v of u
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ d\left[v\right]\ \leftarrow\ -1;$
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-Enqueue all unvisited neighbors, and set the return array’s length
+\begin_layout Enumerate
+\begin_inset Formula $d\left[s\right]\ \leftarrow\ 0;$
+\end_inset
+
+
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-d[v] = d[u] + 1
+\begin_layout Enumerate
+\begin_inset Formula $Q\ \leftarrow\ \phi;$
+\end_inset
+
+
 \end_layout
 
-\end_deeper
-\end_deeper
+\begin_layout Enumerate
+\begin_inset Formula $Enqueue\ s\ \leftarrow Q;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $while\ Q\ \neq\ \phi\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ for\ all\ u\ \in\ Q\ in\ parallel\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ Delete\ u\ \leftarrow\ Q;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ for\ each\ v\ adjacent\ to\ u\ in\ parallel\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ if\ d\left[v\right]\ =\ -1\ then$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ \ \ \ d\left[v\right]\ \leftarrow\ d\left[u\right]\ +\ 1;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ \ \ \ Enqueue\ v\ \leftarrow\ Q;$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 This algorithm takes full advantage of the Cray MTA-2 system’s architecture
  by using its fine-grained parallelism and zero-overhead synchronization
