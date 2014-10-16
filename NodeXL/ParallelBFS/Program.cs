@@ -17,6 +17,13 @@ namespace ParallelBFS
             GraphGenerator graphGenerator = new GraphGenerator();
             IGraph graph = graphGenerator.Generator(true);
 
+            var degreeZero = graph.Vertices.Where( a => a.Degree == 0);
+
+            foreach(IVertex vertex in degreeZero.ToList())
+            {
+                graph.Vertices.Remove(vertex);
+            }
+
             //IVertex discoveredVertex = BreadthFirstSearch(graph, "Last Name", "Pecoraro");
             //if (discoveredVertex != null)
             //{
@@ -216,17 +223,23 @@ namespace ParallelBFS
             Queue<IVertex> queue = new Queue<IVertex>();
             IVertex root = graph.Vertices.FirstOrDefault();
             int numVisitedNodes = 0;
+            int duplicateConnection = 0;
+            int numberofEdges = 0;
 
-            queue.Enqueue(root);
             root.Visited = true;
+            queue.Enqueue(root);
+         
             numVisitedNodes++;
 
             while (queue.Count > 0)
             {
                 IVertex currentNode = queue.Dequeue();
-                foreach (IEdge edge in currentNode.IncidentEdges)
+             
+
+                foreach (IEdge edge in currentNode.OutgoingEdges)
                 {
                     IVertex child;
+                    numberofEdges++;
 
                     if (currentNode != edge.Vertex2)
                     {
@@ -237,15 +250,20 @@ namespace ParallelBFS
                         child = edge.Vertex1;
                     }
 
-                    if (!child.Visited)
+                    if (!child.Visited && child != null)
                     {
-                        queue.Enqueue(child);
                         child.Visited = true;
                         numVisitedNodes++;
+                        queue.Enqueue(child);
+                    }
+                    else
+                    {
+                        duplicateConnection++;
                     }
                 }
             }
 
+            var unVisited = graph.Vertices.Where(a => a.Visited == false);
             return numVisitedNodes;
         }
     }
