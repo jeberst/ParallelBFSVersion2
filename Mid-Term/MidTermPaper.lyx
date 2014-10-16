@@ -697,8 +697,14 @@ Our projects technical approach will focus on comparing three versions of
 The performance comparison of the algorithms will be determined by the amount
  of time each algorithm takes to fully traverse every node in two scale-free
  graphing benchmarks.
- We have implemented a third party application, NodeXL, to generate large
- scale-free graphs within our application.
+ We have implemented our solution using a third party application, NodeXL
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Smith:2009:ANN:1556460.1556497"
+
+\end_inset
+
+, to generate large scale-free graphs within our application.
  The NodeXL program is an open source application written in the C# language.
  In general, it is used as a network visualization tool which gives users
  the ability to view a graph’s connectivity on a graphical interface.
@@ -1104,7 +1110,7 @@ Execute the algorithms and collect experimental results
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "C:/Bibtex/AScalableDistributedParallelBreadth-FirstSearchAlgorithm,C:/Bibtex/DesigningMultithreadedAlgorithmsForBreadthFirstSearchandStConnectivity,C:/Bibtex/ParallelBreadthFirstSearchOnDistributedMemorySystems,C:/Bibtex/ScalingTechniquesForMassiveScaleFreeGraphsInDistributedMemory"
+bibfiles "C:/Bibtex/AScalableDistributedParallelBreadth-FirstSearchAlgorithm,C:/Bibtex/DesigningMultithreadedAlgorithmsForBreadthFirstSearchandStConnectivity,C:/Bibtex/ParallelBreadthFirstSearchOnDistributedMemorySystems,C:/Bibtex/ScalingTechniquesForMassiveScaleFreeGraphsInDistributedMemory,C:/Bibtex/AnalyzingSocialMediaNetworksWithNodeXL"
 options "plain"
 
 \end_inset
