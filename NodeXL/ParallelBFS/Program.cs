@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace ParallelBFS
 {
@@ -16,6 +17,8 @@ namespace ParallelBFS
         {
             GraphGenerator graphGenerator = new GraphGenerator();
             IGraph graph = graphGenerator.Generator(true);
+
+
 
             var degreeZero = graph.Vertices.Where( a => a.Degree == 0);
 
@@ -39,6 +42,14 @@ namespace ParallelBFS
             var timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+
+            DateTime startTime2 = DateTime.Now;
+            int numNodesVisited2 = ParallelBFS(graph);
+            DateTime endTime2 = DateTime.Now;
+
+            var timediff2 = endTime2 - startTime2;
+            Console.WriteLine("Visited: " + numNodesVisited2 + " nodes.");
+            Console.WriteLine("Time to finish execution: " + timediff2);
             
             
             OneDimensionalPartitioning(graph);
@@ -266,7 +277,79 @@ namespace ParallelBFS
             var unVisited = graph.Vertices.Where(a => a.Visited == false);
             return numVisitedNodes;
         }
+
+        static int ParallelBFS(IGraph graph)
+        {
+           // int[] distances = new int[graph.Vertices.Count];
+            int numVisitedNodes = 0;
+            IVertex root = graph.Vertices.FirstOrDefault();
+             ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
+
+             Parallel.ForEach(graph.Vertices, vertex =>
+                 {
+                     vertex.Visited = false;
+                 }
+                 );
+
+                    root.Visited = true;
+                    numVisitedNodes++;
+
+                    queue.Enqueue(root);
+                   
+                    while(!queue.IsEmpty)
+                    {
+                        numVisitedNodes += queue.AsParallel().Sum(node => parallelDequeue(queue));
+                    }
+
+            return numVisitedNodes;
+        }
+
+        private static int parallelDequeue(ConcurrentQueue<IVertex> queue)
+        {
+            int visited = 0;
+            IVertex currentNode = null;
+
+            queue.TryDequeue(out currentNode);
+
+            if (currentNode != null)
+            {
+                List<IEdge> edges = currentNode.OutgoingEdges.ToList();
+
+                visited = edges.AsParallel().Sum(edge => processEdges(edge, currentNode, queue));
+            }
+            return visited;
+        }
+
+
+        static int processEdges(IEdge edge, IVertex currentNode, ConcurrentQueue<IVertex> queue)
+        {
+            IVertex child = null;
+            int visited = 0;
+            if (currentNode != edge.Vertex2)
+            {
+                child = edge.Vertex2;
+            }
+            else if(child != edge.Vertex1)
+            {
+                child = edge.Vertex1;
+            }
+
+            if (child != null)
+            {
+                if (!child.Visited)
+                {
+                    child.Visited = true;
+                    visited++;
+                    queue.Enqueue(child);
+                }
+            }
+
+            return visited;
+        }
+
     }
+
+
 
 
     class OneDimensionalPartition
