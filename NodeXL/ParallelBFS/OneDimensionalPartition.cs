@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using Smrf.NodeXL.Core;
 using System.Collections.Generic;
 using System.Linq;
