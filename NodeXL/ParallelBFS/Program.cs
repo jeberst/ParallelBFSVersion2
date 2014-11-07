@@ -67,12 +67,8 @@ namespace ParallelBFS
             List<Thread> threadList = new List<Thread>();
             List<OneDimensionalPartition> partition = new List<OneDimensionalPartition>();
 
-            for (int i = 0; i < NUM_THREADS; i++ )
-            {
-            }
-            //Parallel.ForEach
 
-            for (int threadNum = 0; threadNum < NUM_THREADS; i++)
+            for (int threadNum = 0; threadNum < NUM_THREADS; threadNum++)
             {
                 int remainder = graphSize % NUM_THREADS;
                 List<IVertex> threadVertices = new List<IVertex>();
