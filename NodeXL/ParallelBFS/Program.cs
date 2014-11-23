@@ -16,7 +16,7 @@ namespace ParallelBFS
         static void Main(string[] args)
         {
             GraphGenerator graphGenerator = new GraphGenerator();
-            IGraph graph = graphGenerator.Generator(true);
+            IGraph graph = graphGenerator.Generator(false);
 
 
 
@@ -82,7 +82,7 @@ namespace ParallelBFS
             //threads on BFSOnOneDimensionalPartitioning();
             int graphSize = g.Vertices.Count();
             int numSubgraphVertices = graphSize / NUM_THREADS;
-            g.Vertices.FirstOrDefault().Level = 0;
+            g.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault().Level = 0;
 
             List<Thread> threadList = new List<Thread>();
             List<OneDimensionalPartitionQueue> partition = new List<OneDimensionalPartitionQueue>();
