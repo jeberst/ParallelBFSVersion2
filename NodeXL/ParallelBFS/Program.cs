@@ -51,8 +51,16 @@ namespace ParallelBFS
             var timediff2 = endTime2 - startTime2;
             Console.WriteLine("Visited: " + numNodesVisited2 + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff2);
-            
-            
+
+            DateTime startTime3 = DateTime.Now;
+            int numNodesVisited3 = BFSLevels(graph);
+            DateTime endTime3 = DateTime.Now;
+
+            var timediff3 = endTime3 - startTime3;
+            Console.WriteLine("Visited: " + numNodesVisited3 + " nodes.");
+            Console.WriteLine("Time to finish execution: " + timediff3);
+
+            Console.ReadKey();
             OneDimensionalPartitioning(graph);
         }
 
@@ -233,7 +241,7 @@ namespace ParallelBFS
             {
                 child = edge.Vertex2;
             }
-            else if(child != edge.Vertex1)
+            else if(currentNode != edge.Vertex1)
             {
                 child = edge.Vertex1;
             }
@@ -274,6 +282,58 @@ namespace ParallelBFS
             vertex.Visited = false;
         }
 
+        public static int BFSLevels(IGraph graph)
+        {
+            List<IVertex> current = new List<IVertex>();
+            ConcurrentBag<IVertex> next = new ConcurrentBag<IVertex>();
+            int numVisitedNodes = 0;
+            uint level = 0;
+            object lockObject = new object();
 
+            Parallel.ForEach(graph.Vertices, vertex =>
+            {
+                vertex.Visited = false;
+                vertex.Level = 0;
+            });
+
+            IVertex root = graph.Vertices.FirstOrDefault();
+            next.Add(root);
+            root.Level = 0;
+            root.Visited = true;
+            numVisitedNodes++;
+
+            while (next.Where(node => (node != null && node.Level == level)).Count() > 0)
+            {
+                current = next.Where(node => (node != null && node.Level == level)).ToList();
+                Parallel.ForEach(current, currentNode =>
+                {
+                    Parallel.ForEach(currentNode.OutgoingEdges, edge =>
+                    {
+                        IVertex child = null;
+                        if (currentNode != edge.Vertex2)
+                        {
+                            child = edge.Vertex2;
+                        }
+                        else if (currentNode != edge.Vertex1)
+                        {
+                            child = edge.Vertex1;
+                        }
+
+                        if (child != null)
+                        {
+                            if (!child.Visited)
+                            {
+                                next.Add(child);
+                                child.Visited = true; ;
+                                child.Level = level + 1;
+                                Interlocked.Increment(ref numVisitedNodes);
+                            }
+                        }
+                    });
+                });
+                level++;
+            }
+            return numVisitedNodes;
+        }
     }
 }
