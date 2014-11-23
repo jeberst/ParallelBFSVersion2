@@ -315,12 +315,6 @@ namespace ParallelBFS
             uint level = 0;
             object lockObject = new object();
 
-            Parallel.ForEach(graph.Vertices, vertex =>
-            {
-                vertex.Visited = false;
-                vertex.Level = 0;
-            });
-
             IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
             next.Add(root);
             root.Level = 0;
@@ -344,9 +338,9 @@ namespace ParallelBFS
                             child = edge.Vertex1;
                         }
 
-                        if (child != null)
+                        lock (lockObject)
                         {
-                            if (!child.Visited)
+                            if (child != null && !child.Visited)
                             {
                                 next.Add(child);
                                 child.Visited = true; ;
