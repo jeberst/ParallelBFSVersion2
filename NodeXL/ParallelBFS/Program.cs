@@ -18,15 +18,7 @@ namespace ParallelBFS
             GraphGenerator graphGenerator = new GraphGenerator();
             IGraph graph = graphGenerator.Generator(false);
 
-
-
-            var degreeZero = graph.Vertices.Where( a => a.Degree == 0);
-
-            var count = degreeZero.Count();
-            foreach(IVertex vertex in degreeZero.ToList())
-            {
-                graph.Vertices.Remove(vertex);
-            }
+            IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
 
             //IVertex discoveredVertex = BreadthFirstSearch(graph, "Last Name", "Pecoraro");
             //if (discoveredVertex != null)
@@ -37,15 +29,26 @@ namespace ParallelBFS
 
              // Testing BFS implementation that iterates through all nodes
             DateTime startTime = DateTime.Now;
-            int numNodesVisited = BreadthFirstSearch(graph);
+            int numNodesVisited = BreadthFirstSearch(graph, root);
             DateTime endTime = DateTime.Now;
             var timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+
+            var firstGraph = graph.Vertices.Where(a => a.Visited == false).ToList();
             resetGraph(graph);
 
             startTime = DateTime.Now;
-            numNodesVisited = ParallelBFS(graph);
+            numNodesVisited = ParallelBFS(graph, root);
+            endTime = DateTime.Now;
+            timediff = endTime - startTime;
+            Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
+            Console.WriteLine("Time to finish execution: " + timediff);
+            var secondGraph = graph.Vertices.Where(a => a.Visited == false);
+            resetGraph(graph);
+
+            startTime = DateTime.Now;
+            numNodesVisited = BFSLevels(graph, root);
             endTime = DateTime.Now;
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
@@ -53,20 +56,11 @@ namespace ParallelBFS
             resetGraph(graph);
 
             startTime = DateTime.Now;
-            numNodesVisited = BFSLevels(graph);
+            numNodesVisited = OneDimensionalPartitioning(graph, root);
             endTime = DateTime.Now;
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
-            resetGraph(graph);
-
-            startTime = DateTime.Now;
-            numNodesVisited = OneDimensionalPartitioning(graph);
-            endTime = DateTime.Now;
-            timediff = endTime - startTime;
-            Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
-            Console.WriteLine("Time to finish execution: " + timediff);
-            resetGraph(graph);
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
@@ -76,13 +70,13 @@ namespace ParallelBFS
 
 
         
-        static int OneDimensionalPartitioning(IGraph g)
+        static int OneDimensionalPartitioning(IGraph g, IVertex root)
         {
             //Divide graph into portions and call
             //threads on BFSOnOneDimensionalPartitioning();
             int graphSize = g.Vertices.Count();
             int numSubgraphVertices = graphSize / NUM_THREADS;
-            g.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault().Level = 0;
+            root.Level = 0;
 
             List<Thread> threadList = new List<Thread>();
             List<OneDimensionalPartitionQueue> partition = new List<OneDimensionalPartitionQueue>();
@@ -164,10 +158,9 @@ namespace ParallelBFS
         }
 
         // Returns the number of node that were visited
-        static int BreadthFirstSearch(IGraph graph)
+        static int BreadthFirstSearch(IGraph graph, IVertex root)
         {
             Queue<IVertex> queue = new Queue<IVertex>();
-            IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
             int numVisitedNodes = 0;
             int duplicateConnection = 0;
             int numberofEdges = 0;
@@ -213,48 +206,57 @@ namespace ParallelBFS
             return numVisitedNodes;
         }
 
-        static int ParallelBFS(IGraph graph)
+        static int ParallelBFS(IGraph graph, IVertex root)
         {
             int[] distances = new int[graph.Vertices.Count*2];
             int numVisitedNodes = 0;
-            IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
-            ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
+            //ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
 
-             Parallel.ForEach(graph.Vertices, vertex =>
-                 {
-                     vertex.Visited = false;
-                     distances[vertex.ID] = -1;
-                 }
-                 );
+            ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
+            
+            IVertex currentNode = null;
+
+            Parallel.ForEach(graph.Vertices, vertex =>
+                {
+                    vertex.Visited = false;
+                    distances[vertex.ID] = -1;
+                }
+                );
 
                     root.Visited = true;
                     distances[root.ID] = 0;
-                    numVisitedNodes++;
+                   Interlocked.Increment(ref numVisitedNodes);
 
                     queue.Enqueue(root);
+                    //queue.Add(root);
                    
-                    while(!queue.IsEmpty)
+                    while(queue.Count != 0)
                     {
-                        numVisitedNodes += queue.AsParallel().Sum(node => parallelDequeue(queue, distances));
+                        //numVisitedNodes += queue.AsParallel().Sum(node => parallelDequeue(queue, distances, null, 0));
+                        numVisitedNodes = numVisitedNodes + parallelDequeue(queue, distances, null, 0);
                     }
 
             return numVisitedNodes;
         }
 
-        private static int parallelDequeue(ConcurrentQueue<IVertex> queue, int[] distances)
+        private static int parallelDequeue(ConcurrentQueue<IVertex> queue, int[] distances, IVertex currentNode, int visited)
         {
-            int visited = 0;
-            IVertex currentNode = null;
-
-            queue.TryDequeue(out currentNode);
-
-            if (currentNode != null)
+            while (currentNode == null)
             {
+                //queue.TryDequeue(out currentNode);
+                queue.TryDequeue(out currentNode);
+            }
+
                 List<IEdge> edges = currentNode.OutgoingEdges.ToList();
 
-                visited = edges.AsParallel().Sum(edge => processEdges(edge, currentNode, queue, distances));
-            }
-            return visited;
+                visited += edges.AsParallel().Sum(edge => processEdges(edge, currentNode, queue, distances));
+    
+                //foreach(var edge in edges)
+                //{
+                //    visited = Interlocked.Add(ref visited,  processEdges(edge, currentNode, queue, distances));
+                //}
+
+                return visited;
         }
 
 
@@ -262,25 +264,28 @@ namespace ParallelBFS
         {
             IVertex child = null;
             int visited = 0;
-            if (currentNode != edge.Vertex2)
-            {
-                child = edge.Vertex2;
-            }
-            else if (currentNode != edge.Vertex1)
-            {
-                child = edge.Vertex1;
-            }
+            object lockobject = new object();
 
-            if (child != null)
-            {
-                if (!child.Visited)
+                if (currentNode != edge.Vertex2)
                 {
-                    child.Visited = true;
-                    distances[child.ID] = distances[currentNode.ID] + 1;
-                    visited++;
-                    queue.Enqueue(child);
+                    child = edge.Vertex2;
                 }
-            }
+                else if (currentNode != edge.Vertex1)
+                {
+                    child = edge.Vertex1;
+                }
+
+                if (child != null)
+                {
+                    if (distances[child.ID] == -1)
+                    {
+                        child.Visited = true;
+                        distances[child.ID] = distances[currentNode.ID] + 1;
+                        Interlocked.Increment(ref visited);
+                        queue.Enqueue(child);
+                        //queue.Add(child);
+                    }
+                }
 
             return visited;
         }
@@ -307,7 +312,7 @@ namespace ParallelBFS
             vertex.Visited = false;
         }
 
-        public static int BFSLevels(IGraph graph)
+        public static int BFSLevels(IGraph graph, IVertex root)
         {
             List<IVertex> current = new List<IVertex>();
             ConcurrentBag<IVertex> next = new ConcurrentBag<IVertex>();
@@ -321,7 +326,6 @@ namespace ParallelBFS
                 vertex.Level = 0;
             });
 
-            IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
             next.Add(root);
             root.Level = 0;
             root.Visited = true;
