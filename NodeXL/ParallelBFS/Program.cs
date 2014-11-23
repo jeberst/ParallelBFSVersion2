@@ -58,8 +58,8 @@ namespace ParallelBFS
             var timediff3 = endTime3 - startTime3;
             Console.WriteLine("Visited: " + numNodesVisited3 + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff3);
-            
-            
+
+            Console.ReadKey();
             OneDimensionalPartitioning(graph);
         }
 
@@ -262,6 +262,7 @@ namespace ParallelBFS
             ConcurrentBag<IVertex> next = new ConcurrentBag<IVertex>();
             int numVisitedNodes = 0;
             uint level = 0;
+            object lockObject = new object();
 
             Parallel.ForEach(graph.Vertices, vertex =>
             {
@@ -272,6 +273,7 @@ namespace ParallelBFS
             IVertex root = graph.Vertices.FirstOrDefault();
             next.Add(root);
             root.Level = 0;
+            root.Visited = true;
             numVisitedNodes++;
 
             while (next.Where(node => (node != null && node.Level == level)).Count() > 0)
@@ -298,7 +300,7 @@ namespace ParallelBFS
                                 next.Add(child);
                                 child.Visited = true; ;
                                 child.Level = level + 1;
-                                numVisitedNodes++;
+                                Interlocked.Increment(ref numVisitedNodes);
                             }
                         }
                     });
