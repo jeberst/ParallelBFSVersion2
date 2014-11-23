@@ -58,5 +58,13 @@ namespace ParallelBFS
             // close the stream
             tw.Close();
         }
+
+        public void saveGraph(IGraph graph)
+        {
+            GraphMLGraphAdapter graphMlAdapter = new Smrf.NodeXL.Adapters.GraphMLGraphAdapter();
+
+          FileStream fs = File.Create("graph.graphml");
+          graphMlAdapter.SaveGraph(graph, fs);
+        }
     }
 }

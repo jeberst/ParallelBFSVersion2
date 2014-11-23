@@ -348,9 +348,9 @@ namespace ParallelBFS
                             child = edge.Vertex1;
                         }
 
-                        if (child != null)
+                        lock (lockObject)
                         {
-                            if (!child.Visited)
+                            if (child != null && !child.Visited)
                             {
                                 next.Add(child);
                                 child.Visited = true; ;
