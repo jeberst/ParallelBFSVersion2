@@ -321,7 +321,7 @@ namespace ParallelBFS
                 vertex.Level = 0;
             });
 
-            IVertex root = graph.Vertices.FirstOrDefault();
+            IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
             next.Add(root);
             root.Level = 0;
             root.Visited = true;
