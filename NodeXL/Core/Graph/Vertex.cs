@@ -74,6 +74,9 @@ public class Vertex : GraphVertexEdgeBase, IVertex
     :
     base( m_oIDGenerator.GetNextID() )
     {
+        Visited = false;
+        Level = UInt32.MaxValue;
+
         m_oParentGraph = null;
 
         m_oFirstIncidentEdgeNode = null;

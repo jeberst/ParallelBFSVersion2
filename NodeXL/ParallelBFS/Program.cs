@@ -33,6 +33,7 @@ namespace ParallelBFS
             //    string firstName = discoveredVertex.GetValue("First Name").ToString();
             //    string lastName = discoveredVertex.GetValue("Last Name").ToString();
             //}
+
             
             // Testing BFS implementation that iterates through all nodes
             DateTime startTime = DateTime.Now;
@@ -42,21 +43,33 @@ namespace ParallelBFS
             var timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+            resetGraph(graph);
 
-            DateTime startTime2 = DateTime.Now;
-            int numNodesVisited2 = ParallelBFS(graph);
-            DateTime endTime2 = DateTime.Now;
+            startTime = DateTime.Now;
+            numNodesVisited = ParallelBFS(graph);
+            endTime = DateTime.Now;
 
-            var timediff2 = endTime2 - startTime2;
-            Console.WriteLine("Visited: " + numNodesVisited2 + " nodes.");
-            Console.WriteLine("Time to finish execution: " + timediff2);
-            
-            
-            OneDimensionalPartitioning(graph);
+            timediff = endTime - startTime;
+            Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
+            Console.WriteLine("Time to finish execution: " + timediff);
+            resetGraph(graph);
+
+            startTime = DateTime.Now;
+            numNodesVisited = OneDimensionalPartitioning(graph);
+            endTime = DateTime.Now;
+            timediff = endTime - startTime;
+            Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
+            Console.WriteLine("Time to finish execution: " + timediff);
+            resetGraph(graph);
+
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
         }
 
+
+
         
-        static void OneDimensionalPartitioning(IGraph g)
+        static int OneDimensionalPartitioning(IGraph g)
         {
             //Divide graph into portions and call
             //threads on BFSOnOneDimensionalPartitioning();
@@ -65,8 +78,7 @@ namespace ParallelBFS
             g.Vertices.FirstOrDefault().Level = 0;
 
             List<Thread> threadList = new List<Thread>();
-            List<OneDimensionalPartition> partition = new List<OneDimensionalPartition>();
-
+            List<OneDimensionalPartitionQueue> partition = new List<OneDimensionalPartitionQueue>();
 
             for (int threadNum = 0; threadNum < NUM_THREADS; threadNum++)
             {
@@ -81,20 +93,35 @@ namespace ParallelBFS
                 {
                     numSubgraphVertices += remainder;
                 }
-
-                //Assign thread ID to each vertex
-                for (int j = startIndex; j < numSubgraphVertices; j++)
-                {
-                    graphAsList[j].threadID = threadNum;
-                }
                 List<IVertex> subGraph = graphAsList.GetRange(startIndex, numSubgraphVertices);
 
-                partition.Add(new OneDimensionalPartition(subGraph, threadNum));
+                partition.Add(new OneDimensionalPartitionQueue(subGraph, threadNum));
                 threadList.Add(new Thread(new ThreadStart(partition[threadNum].bfs)));
-                //BFSOnOneDimensionalPartitioning(subGraph, i);
             }
 
-            //Parallel.ForEach<
+            for (int i = 0; i < threadList.Count; i++)
+            {
+                //Console.WriteLine("Starting thread " + i);
+                threadList[i].Start();
+            }
+            int totalCounted = 0;
+            for (int i = 0; i < threadList.Count; i++)
+            {
+                threadList[i].Join();
+                //Console.WriteLine("Thread " + i + " finished");
+                totalCounted += partition[i].numItemsEnqueued;
+            }
+
+            return totalCounted;
+        }
+
+        static void resetGraph(IGraph g)
+        {
+            foreach (IVertex v in g.Vertices)
+            {
+                v.Visited = false;
+                v.Level = UInt32.MaxValue;
+            }
         }
 
         static Smrf.NodeXL.Core.IVertex BreadthFirstSearch(IGraph graph, string searchKey, string searchValue)
@@ -230,7 +257,7 @@ namespace ParallelBFS
             {
                 child = edge.Vertex2;
             }
-            else if(child != edge.Vertex1)
+            else if (currentNode != edge.Vertex1)
             {
                 child = edge.Vertex1;
             }
@@ -247,6 +274,5 @@ namespace ParallelBFS
 
             return visited;
         }
-
     }
 }

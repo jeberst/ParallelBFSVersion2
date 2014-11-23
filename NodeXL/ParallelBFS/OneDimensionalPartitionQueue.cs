@@ -11,114 +11,103 @@ namespace ParallelBFS
 {
     public class OneDimensionalPartitionQueue
     {
-            const int NUM_THREADS = 8;
-            int myThreadID = int.MaxValue;
-            List<IVertex> subGraph = null;
-            public OneDimensionalPartitionQueue(List<IVertex> subGraph, int threadID)
+        static int finishMask = 0;  //Return state
+        static int finishField = 0; //Current status
+        static ConcurrentQueue<IVertex>[] localQueue = new ConcurrentQueue<IVertex>[NUM_THREADS];
+        const uint NUM_THREADS = 8;
+        public int numItemsEnqueued = 0;
+        static object lockObject = new object();
+
+        int myThreadID = int.MaxValue;
+        List<IVertex> subGraph = null;
+
+        public OneDimensionalPartitionQueue(List<IVertex> subGraph, int threadID)
+        {
+            //finishMask should ONLY be modifed during constuction.
+            finishMask |= 1 << threadID;
+            //Console.WriteLine("finishMask = " + finishMask);
+            this.myThreadID = threadID;
+            this.subGraph = subGraph;
+            for (int i = 0; i < this.subGraph.Count(); i++)
             {
-                this.myThreadID = threadID;
-                this.subGraph = subGraph;
+                this.subGraph[i].threadID = threadID;
+            }
+            localQueue[threadID] = new ConcurrentQueue<IVertex>();
+        }
+
+        //This version of the function does not look for any particular node
+        // and attempts to search the entire graph.
+        public void bfs()
+        {
+            //Set initial list.
+            foreach (IVertex v in subGraph)
+            {
+                if (!v.Visited && v.Level == 0) //Line 3
+                {
+                    localQueue[v.threadID].Enqueue(v);
+                    finishField |= 1 << v.threadID;
+                    Interlocked.Increment(ref numItemsEnqueued);
+                    v.Visited = true;
+                }
             }
 
-            //This version of the function does not look for any particular node
-            // and attempts to search the entire graph.
-            public void bfs()
+            do // Until everyone marked as finished
             {
-
-                // L = level of vertices serched
-
-                //Lva = (L sub (v sub s))
-                //                     / 0, v = (v sub s), where (v sub s) is a source
-                //1: Initilize Lva(v) <
-                //                     \ inf, otherwise
-                // 2: for l = 0 to inf do
-                // 3:   F <- {v|Lva(v) = l}, the set of all local vertices with level l
-                // 4:   if F = null for all processors then
-                // 5:       Terminate main loop
-                // 6:   end if
-                // 7:   N <- {neighbors of vertices in f (not neccessarily local
-                // 8:   for all processors q do
-                // 9:       Nq <- { vertices in N owned by processor q}
-                //10:       Send Nq to processor q
-                //11:       Receive N`q from processor q
-                //12:   end for
-                //13:   N` <- Uq N'q ( Ther N`q may overlap)
-                //14:   for v elementOf N` and Lvs(v) = inf do
-                //15:       Lvs(v) <- l + 1
-                //16:   endfor
-                //17: end for
-
-
-                for (UInt32 currentLevel = 0; currentLevel < UInt32.MaxValue; currentLevel++) // Line 2
+                while (localQueue[myThreadID].Count() != 0) // Whlie there are objects in local queue
                 {
-                    List<IVertex> F = new List<IVertex>();
-                    foreach (IVertex v in subGraph)
+                    IVertex sourceVertex;
+                    bool success = true;
+                    do // Until dequeue succeeds
                     {
-                        if (!v.Visited && v.Level == currentLevel) //Line 3
+                        success = localQueue[myThreadID].TryDequeue(out sourceVertex);
+                    } while (!success);
+
+                    foreach (IEdge e in sourceVertex.OutgoingEdges)
+                    {
+                        //Change this flag to decide whether to update all child node depths or not.
+                        bool updateChildren = false;
+                        IVertex destVertex = null;
+                        if (sourceVertex != e.Vertex2)
                         {
-                            F.Add(v);  // Line3
+                            destVertex = e.Vertex2;
+                        }
+                        else if (sourceVertex != e.Vertex1)
+                        {
+                            destVertex = e.Vertex1;
                         }
 
-                        if (F.Count == 0) // Line 4
+                        if (destVertex != null && updateChildren)
                         {
-                            //TODO: Check other threads if done
-                            //send(We are done?);
-                            return;  // Line 5
-                        }
-                    }
-
-                    //Line 7
-                    List<IVertex> N = new List<IVertex>();
-                    foreach (IVertex v in F)
-                    {
-                        foreach (IEdge e in v.OutgoingEdges)
-                        {
-                            N.Add(e.Vertex2);
-                        }
-                    }
-
-                    //Lines 8 - 12
-                    List<IVertex> newNeighbors = new List<IVertex>();
-                    foreach (IVertex v in N)
-                    {
-                        for (int i = 0; i < NUM_THREADS; i++)
-                        {
-                            List<List<IVertex>> Nq = new List<List<IVertex>>();
-                            if (v.threadID == i)
+                            if (destVertex.Level < sourceVertex.Level + 1 || destVertex.Level == UInt32.MaxValue)
                             {
-                                Nq[i].Add(v);
+                                finishField = 0;
+                                destVertex.Level = sourceVertex.Level + 1;
+                                localQueue[sourceVertex.threadID].Enqueue(sourceVertex);
+                                Interlocked.Increment(ref numItemsEnqueued);
                             }
                         }
-                        for (int i = 0; i < NUM_THREADS; i++)
+                        else if (destVertex != null)
                         {
-                            if (i != myThreadID)
+                            if (destVertex.Level == UInt32.MaxValue)
                             {
-                                //TODO: Implement send
-                                //send(thread[i], Nq[i]);
+                                finishField = 0;
+                                destVertex.Level = sourceVertex.Level + 1;
+                                localQueue[destVertex.threadID].Enqueue(destVertex);
+                                Interlocked.Increment(ref numItemsEnqueued);
                             }
-                        }
-                        for (int i = 0; i < NUM_THREADS; i++)
-                        {
-                            List<IVertex> recieved;
-                            if (i != myThreadID)
-                            {
-                                //TODO: Implement recieve
-                                //recieved = recieve(thread[i]);
-                                //newNeighbors.AddRange(recieved);
-                            }
-                        }
-                    }
-
-                    N.AddRange(newNeighbors); // Line 13
-                    //TODO: Check for repaeats and remove as needed (May not be neccicary)
-                    foreach (IVertex v in N)
-                    {
-                        if (v.Level == UInt32.MaxValue)
-                        {
-                            v.Level = currentLevel + 1;
                         }
                     }
                 }
-            }
+
+                if (localQueue[myThreadID].Count() == 0) // May not be needed.
+                {
+                    lock (lockObject)
+                    {
+                        Interlocked.Exchange(ref finishField, finishField | 1 << myThreadID);
+                    }
+                }   
+            } while (finishField != finishMask); // Line 4
+            //Console.WriteLine(myThreadID + " exiting");
         }
+    }
 }
