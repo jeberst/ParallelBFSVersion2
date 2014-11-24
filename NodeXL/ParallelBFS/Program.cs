@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.IO;
 
 namespace ParallelBFS
 {
@@ -15,6 +16,7 @@ namespace ParallelBFS
         [STAThread]
         static void Main(string[] args)
         {
+            StreamWriter writer = new StreamWriter("results.txt");
             GraphGenerator graphGenerator = new GraphGenerator();
             IGraph graph = graphGenerator.Generator(false);
 
@@ -34,6 +36,7 @@ namespace ParallelBFS
             var timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+            writer.WriteLine(timediff.Milliseconds + " sequential");
 
             var firstGraph = graph.Vertices.Where(a => a.Visited == false).ToList();
             Console.WriteLine("Unvisited " + firstGraph.Count());
@@ -45,6 +48,7 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+            writer.WriteLine(timediff.Milliseconds + " MTBFS");
             var secondGraph = graph.Vertices.Where(a => a.Visited == false);
             Console.WriteLine("Unvisited " + secondGraph.Count());
             resetGraph(graph);
@@ -57,6 +61,7 @@ namespace ParallelBFS
             Console.WriteLine("Time to finish execution: " + timediff);
             var thirdGraph = graph.Vertices.Where(a => a.Visited == false);
             Console.WriteLine("Unvisited " + thirdGraph.Count());
+            writer.WriteLine(timediff.Milliseconds + " LSBFS");
             resetGraph(graph);
 
             startTime = DateTime.Now;
@@ -67,7 +72,9 @@ namespace ParallelBFS
             Console.WriteLine("Time to finish execution: " + timediff);
             var fourthGraph = graph.Vertices.Where(a => a.Visited == false);
             Console.WriteLine("Unvisited " + fourthGraph.Count());
+            writer.WriteLine(timediff.Milliseconds + " PPBFS");
 
+            writer.Close();
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
