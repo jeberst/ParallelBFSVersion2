@@ -18,7 +18,7 @@ namespace ParallelBFS
         {
             StreamWriter writer = new StreamWriter("results.txt");
             GraphGenerator graphGenerator = new GraphGenerator();
-            IGraph graph = graphGenerator.Generator(true);
+            IGraph graph = graphGenerator.Generator(false);
 
             IVertex root = graph.Vertices.OrderByDescending(a => a.Degree).FirstOrDefault();
 
@@ -36,7 +36,7 @@ namespace ParallelBFS
             var timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
-            writer.WriteLine(timediff.Milliseconds);
+            writer.WriteLine(timediff.Milliseconds + " sequential");
 
             var firstGraph = graph.Vertices.Where(a => a.Visited == false).ToList();
             resetGraph(graph);
@@ -47,7 +47,7 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
-            writer.WriteLine(timediff.Milliseconds);
+            writer.WriteLine(timediff.Milliseconds + " MTBFS");
             var secondGraph = graph.Vertices.Where(a => a.Visited == false);
             resetGraph(graph);
 
@@ -57,7 +57,7 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
-            writer.WriteLine(timediff.Milliseconds);
+            writer.WriteLine(timediff.Milliseconds + " LSBFS");
             resetGraph(graph);
 
             startTime = DateTime.Now;
@@ -66,7 +66,7 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
-            writer.WriteLine(timediff.Milliseconds);
+            writer.WriteLine(timediff.Milliseconds + " PPBFS");
 
             writer.Close();
             Console.WriteLine("Press any key to continue");
