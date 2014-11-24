@@ -36,6 +36,7 @@ namespace ParallelBFS
             Console.WriteLine("Time to finish execution: " + timediff);
 
             var firstGraph = graph.Vertices.Where(a => a.Visited == false).ToList();
+            Console.WriteLine("Unvisited " + firstGraph.Count());
             resetGraph(graph);
 
             startTime = DateTime.Now;
@@ -45,6 +46,7 @@ namespace ParallelBFS
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
             var secondGraph = graph.Vertices.Where(a => a.Visited == false);
+            Console.WriteLine("Unvisited " + secondGraph.Count());
             resetGraph(graph);
 
             startTime = DateTime.Now;
@@ -53,6 +55,8 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+            var thirdGraph = graph.Vertices.Where(a => a.Visited == false);
+            Console.WriteLine("Unvisited " + thirdGraph.Count());
             resetGraph(graph);
 
             startTime = DateTime.Now;
@@ -61,6 +65,8 @@ namespace ParallelBFS
             timediff = endTime - startTime;
             Console.WriteLine("Visited: " + numNodesVisited + " nodes.");
             Console.WriteLine("Time to finish execution: " + timediff);
+            var fourthGraph = graph.Vertices.Where(a => a.Visited == false);
+            Console.WriteLine("Unvisited " + fourthGraph.Count());
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
@@ -212,9 +218,8 @@ namespace ParallelBFS
             int numVisitedNodes = 0;
             //ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
 
-            ConcurrentQueue<IVertex> queue = new ConcurrentQueue<IVertex>();
+            BlockingCollection<IVertex> queue = new BlockingCollection<IVertex>();
             
-            IVertex currentNode = null;
 
             Parallel.ForEach(graph.Vertices, vertex =>
                 {
@@ -225,45 +230,52 @@ namespace ParallelBFS
 
                     root.Visited = true;
                     distances[root.ID] = 0;
-                   Interlocked.Increment(ref numVisitedNodes);
+                    numVisitedNodes++;
 
-                    queue.Enqueue(root);
-                    //queue.Add(root);
-                   
-                    while(queue.Count != 0)
+                    //queue.Enqueue(root);
+                    queue.Add(root);
+                    int index=0;
+                    int[] sums = new int[graph.Vertices.Count*2];
+                    IVertex currentNode = null;
+                    object lockObject = new object();
+              
+                    while (queue.Count != 0)
                     {
-                        //numVisitedNodes += queue.AsParallel().Sum(node => parallelDequeue(queue, distances, null, 0));
-                        numVisitedNodes = numVisitedNodes + parallelDequeue(queue, distances, null, 0);
-                    }
+                        Interlocked.Add(ref numVisitedNodes, queue.AsParallel<IVertex>().Sum(node => parallelDequeue(queue, distances, lockObject)));
+                    } 
 
             return numVisitedNodes;
         }
 
-        private static int parallelDequeue(ConcurrentQueue<IVertex> queue, int[] distances, IVertex currentNode, int visited)
+        private static int parallelDequeue(BlockingCollection<IVertex> queue, int[] distances, object lockObject)
         {
-            while (currentNode == null)
-            {
-                //queue.TryDequeue(out currentNode);
-                queue.TryDequeue(out currentNode);
+            int visited = 0;
+
+                IVertex currentNode = null;
+
+                while (currentNode == null)
+                {
+                    queue.TryTake(out currentNode);
+                }
+
+
+                if (currentNode != null)
+                {
+                    int[] sums = new int[currentNode.OutgoingEdges.Count * 2];
+                    List<IEdge> edges = currentNode.OutgoingEdges.ToList();
+
+
+                        Interlocked.Add(ref visited, edges.AsParallel().Sum(edge => processEdges(edge, currentNode, queue, distances)));
             }
-
-                List<IEdge> edges = currentNode.OutgoingEdges.ToList();
-
-                visited += edges.AsParallel().Sum(edge => processEdges(edge, currentNode, queue, distances));
-    
-                //foreach(var edge in edges)
-                //{
-                //    visited = Interlocked.Add(ref visited,  processEdges(edge, currentNode, queue, distances));
-                //}
-
                 return visited;
+            
         }
 
 
-        static int processEdges(IEdge edge, IVertex currentNode, ConcurrentQueue<IVertex> queue, int[] distances)
+        static int processEdges(IEdge edge, IVertex currentNode, BlockingCollection<IVertex> queue, int[] distances)
         {
             IVertex child = null;
-            int visited = 0;
+            int visitededges = 0;
             object lockobject = new object();
 
                 if (currentNode != edge.Vertex2)
@@ -281,13 +293,13 @@ namespace ParallelBFS
                     {
                         child.Visited = true;
                         distances[child.ID] = distances[currentNode.ID] + 1;
-                        Interlocked.Increment(ref visited);
-                        queue.Enqueue(child);
-                        //queue.Add(child);
+                        Interlocked.Increment(ref visitededges);
+                        //queue.Enqueue(child);
+                        queue.Add(child);
                     }
                 }
 
-            return visited;
+            return visitededges;
         }
 
         private void tutorialMethod(IGraph graph)
