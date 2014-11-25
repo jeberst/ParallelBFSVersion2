@@ -1,0 +1,1364 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass IEEEtran
+\begin_preamble
+
+%% bare_conf.tex
+%% V1.3
+%% 2007/01/11
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.7 or later) with an IEEE conference paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%
+%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
+%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
+%%*************************************************************************
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. IEEE's font choices can trigger bugs that do  ***
+% *** not appear when using other class files.                            ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+% Note that the a4paper option is mainly intended so that authors in
+% countries using A4 can easily print to A4 and see how their papers will
+% look in print - the typesetting of the document will not typically be
+% affected with changes in paper size (but the bottom and side margins will).
+% Use the testflow package mentioned above to verify correct handling of
+% both paper sizes by the user's LaTeX system.
+%
+% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
+% should be used if it is desired that the figures are to be displayed in
+% draft mode.
+%
+% Add the compsoc option for Computer Society conferences.
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[conference]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
+% not currently provide for hyperlinked citations.
+% The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at: 
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
+% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics. If using
+% it, be sure to load this package with the cmex10 option to ensure that
+% only type 1 fonts will utilized at all point sizes. Without this option,
+% it is possible that some math symbols, particularly those within
+% footnotes, will be rendered in bitmap form which will result in a
+% document that can not be IEEE Xplore compliant!
+%
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
+% There is also a support site at:
+% http://algorithms.berlios.de/index.html
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/tools/
+
+
+%\usepackage{mdwmath}
+%\usepackage{mdwtab}
+% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
+% especially mdwmath.sty and mdwtab.sty which are used to format equations
+% and tables, respectively. The MDWtools set is already installed on most
+% LaTeX systems. The lastest version and documentation is available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+%\usepackage{eqparbox}
+% Also of notable interest is Scott Pakin's eqparbox package for creating
+% (automatically sized) equal width boxes - aka "natural width parboxes".
+% Available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
+
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\usepackage[tight,footnotesize]{subfigure}
+% subfigure.sty was written by Steven Douglas Cochran. This package makes it
+% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
+% work, it is a good idea to load it with the tight package option to reduce
+% the amount of white space around the subfigures. subfigure.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at:
+% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
+% subfigure.sty has been superceeded by subfig.sty.
+
+
+
+%\usepackage[caption=false]{caption}
+%\usepackage[font=footnotesize]{subfig}
+% subfig.sty, also written by Steven Douglas Cochran, is the modern
+% replacement for subfigure.sty. However, subfig.sty requires and
+% automatically loads Axel Sommerfeldt's caption.sty which will override
+% IEEEtran.cls handling of captions and this will result in nonIEEE style
+% figure/table captions. To prevent this problem, be sure and preload
+% caption.sty with its "caption=false" package option. This is will preserve
+% IEEEtran.cls handing of captions. Version 1.3 (2005/06/28) and later 
+% (recommended due to many improvements over 1.2) of subfig.sty supports
+% the caption=false option directly:
+%\usepackage[caption=false,font=footnotesize]{subfig}
+%
+% The latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
+% The latest version and documentation of caption.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure. The latest version and documentation can be found at:
+% http://www.ctan.org/tex-archive/macros/latex/base/
+
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
+% Documentation is contained in the stfloats.sty comments as well as in the
+% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
+% does not allow \baselineskip to stretch. Authors submitting work to the
+% IEEE should note that IEEE rarely uses double column equations and
+% that authors should try to avoid such use. Do not be tempted to use the
+% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
+% not format its papers in such ways.
+
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
+% Read the url.sty source comments for usage information. Basically,
+% \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+\let\textquotedbl="
+\end_preamble
+\options conference
+\use_default_options false
+\begin_modules
+enumitem
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Parallel Breadth First Search for Scale-Free Social Network Graphs
+\end_layout
+
+\begin_layout Author
+\begin_inset Flex Flex:Author Name
+status collapsed
+
+\begin_layout Plain Layout
+James Ihrig
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Flex:Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+University of Central Florida
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Flex:Author Name
+status collapsed
+
+\begin_layout Plain Layout
+Josh Eberst
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Flex:Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+University of Central Florida
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Flex:Author Name
+status collapsed
+
+\begin_layout Plain Layout
+Johnathan Pecoraro
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Flex:Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+University of Central Florida
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+Graphical representations are one of the most commonly used abstractions
+ to model large networks.
+ Social media networks like Facebook and Twitter contain massive scale free
+ networks with billions of nodes.
+ The scale free nature of the connections between nodes presents several
+ challenges to the performance of traditional searching algorithms.
+ In this paper, we present two implementations of Parallel Breadth First
+ Search algorithms on scale free networks without the use of specialized
+ hardware.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Graph abstractions are commonly used in large scale network analysis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+.
+ With the proliferation of "Big Data" applications, parallelized versions
+ of common graph analysis algorithms have a very high demand.
+ 
+\end_layout
+
+\begin_layout Standard
+Many graph analysis problems make use of Breadth First Search (BFS), as
+ the efficiency of the algorithm scales linearly with the number of nodes
+ and edges.
+ 
+\end_layout
+
+\begin_layout Standard
+Parallelizing Breadth First Search algorithms offers an excellent opportunity
+ to increase the efficiency of this common graph analysis technique.
+ However, scale free networks such as those created by social media connections
+ are challenging to parallelize efficiently as the high distribution of
+ edges to a few nodes is difficult to balance in memory 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bader:2006:DMA:1156433.1157602"
+
+\end_inset
+
+.
+ Our research is targeted at the implementation of two.
+ 
+\end_layout
+
+\begin_layout Standard
+Parallel Breadth First Search algorithms without the use of specialized
+ hardware on scale free networks.
+ The first algorithm, Parallel Breadth First Search with Partitioning (PPBFS),
+ was originally designed to improve BFS performance in distributed memory
+ architectures used by many modern supercomputers.
+ Our implementation will specifically apply this solution to scale free
+ networks, which was left as future work by the original authors.
+ However, as we are not implementing specialized hardware, our research
+ will be performed without the use of a distributed memory architecture.
+\end_layout
+
+\begin_layout Standard
+The second algorithm we will implement, Multithreaded Breadth First Search
+ (MTBFS), is designed to support fine-grained, low overhead synchronization
+ in a massively multithreaded system 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+.
+ This algorithm will be used for gauging the performance of PPBFS, as MTBFS
+ was intended to support scale free graphs.
+ Since the focus of MTBFS is on increased parallelism through multi threading,
+ the differences between the Cray MTA-2 system MTBFS was designed for and
+ a standard multi-core CPU should be less drastic than the shift from the
+ distributed memory architecture used by PPBFS.
+ Memory access by BFS and other graph algorithms is typically fine-grained
+ and irregular.
+ This leads to poor cache performance, especially in parallel versions of
+ BFS as parallelization relies heavily on the cache performance.
+ Some performance improvements can be made, but they can not be sufficiently
+ generalized since cache performance depends largely on the structure of
+ the graph 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We will compare both of these algorithms with the sequential version of
+ BFS across two datasets.
+ One dataset will be a sufficiently large import of a Facebook social network,
+ and the other a generic scale free network generator GDBench 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Buluc:2011:PBS:2063384.2063471"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Related Work
+\end_layout
+
+\begin_layout Subsection*
+A Scalable Distributed Parallel Breadth First Search Algorithm on BlueGene/L
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This paper talks about searching networks that are too large to fit into
+ memory of a single machine.
+ To handle this, it divides the graph into partitions where each node processes
+ a set of vertices assigned to it.
+ If it finds a vertex that does not belong to it, the node that owns it
+ is notified.
+ One major drawback this approach seems to have is that it waits for all
+ processes to reach the same level before moving on.
+ While this is important to truly follow a breadth first pattern, it may
+ not be necessary to limit it in this way.
+\end_layout
+
+\begin_layout Subsection*
+Designing Multithreaded Algorithms for Breath First search and st-connectivity
+ on the Cray MTA-2
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bader:2006:DMA:1156433.1157602"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Multithreaded BFS algorithm implemented by Bader and Madduri will serve
+ as our baseline parallel BFS algorithm.
+ Although initially implemented on a massively multithreaded shared memory
+ system without a data cache, we believe the fine-grained parallelization
+ of this algorithm will still perform efficiently in a single CPU multi-core
+ system.
+ We have chosen this algorithm to serve as baseline parallelized implementation
+ because it was specifically designed for the traversal of large scale-free
+ graphs similar to those used in our benchmarks.
+\end_layout
+
+\begin_layout Subsection*
+Parallel Breadth First Search on Distributed Memory Systems
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Buluc:2011:PBS:2063384.2063471"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The partitioning Parallel Breadth First Search algorithm for distributed
+ memory systems implemented by Buluc and Madduri extends the research performed
+ by Yoo on the Scalable Distributed Parallel Breadth First Search, and highlight
+s inefficiencies in the supporting structure of the other research.
+ This research provided prior work summaries and criticism on the two algorithms
+ we will adopt, but implementing the improvements made here is outside the
+ scope of our research.
+\end_layout
+
+\begin_layout Section
+Technical Approach
+\end_layout
+
+\begin_layout Standard
+Our projects technical approach will focus on comparing three versions of
+ the BFS algorithm.
+ The original implementations of our two parallel BFS algorithms were intended
+ for use on super-computing hardware.
+ The reason we have implemented two versions of parallel BFS algorithms
+ is to allow for additional performance comparisons of the algorithms, since
+ they are both abstracted away from their specialized hardware.
+ Accordingly we believe that the PPBFS algorithm’s performance will be the
+ most dependent on the hardware, and the MTBFS algorithm will be more hardware
+ agnostic.
+ These parallel algorithms will both have their performance compared with
+ a traditional sequential implementation of BFS
+\end_layout
+
+\begin_layout Standard
+The performance comparison of the algorithms will be determined by the amount
+ of time each algorithm takes to fully traverse every node in two scale-free
+ graphing benchmarks.
+ We have implemented our solution using a third party application, NodeXL
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Smith:2009:ANN:1556460.1556497"
+
+\end_inset
+
+, to generate large scale-free graphs within our application.
+ The NodeXL program is an open source application written in the C# language.
+ In general, it is used as a network visualization tool which gives users
+ the ability to view a graph’s connectivity on a graphical interface.
+ Additionally, there is a social network plugin for the NodeXL application
+ which provides the capability of importing a social network graph from
+ Facebook.
+ We have utilized the class libraries for NodeXL and the associated social
+ network plugin within our application to assist with the generation of
+ large graphs.
+\end_layout
+
+\begin_layout Standard
+Our first benchmark will be based on a graph of a sufficiently large social
+ network imported through the use of the Facebook social network plugin
+ for NodeXL.
+ Our second benchmark is a generic scale-free graph generated by the social
+ network data generator GDBench.
+ The GDBench tool is capable of generating scale-free graphs with millions
+ of nodes, and saving it in a common GraphML format.
+ The GraphML file generated by the benchmark will be imported using NodeXL
+ into a graph consumable by the algorithms.
+ These social networking benchmarks should both be sufficiently large to
+ incur the cache performance challenges associated with many parallel BFS
+ solutions.
+\end_layout
+
+\begin_layout Section
+Technical Details
+\end_layout
+
+\begin_layout Standard
+Our research is based on a distributed parallel approach to BFS, originally
+ implemented on the IBM BlueGene/L supercomputer.
+ We hope to attain performance increases using the same methods on a single
+ CPU using multiple cores.
+ Additionally, we will attempt to find optimizations to the algorithm such
+ as allowing the processor to continue without waiting for send/receive
+ messages before continuing the search for a given level/depth.
+\end_layout
+
+\begin_layout Subsection*
+Parallel With Partitioning BFS (PPBFS)
+\end_layout
+
+\begin_layout Standard
+The original algorithm used as a reference for our project was implemented
+ as a distributed BFS on the BlueGene/L architecture.
+ The algorithm takes advantage of the architecture’s structure to develop
+ efficient inter-processor communication, which is generally the bottleneck
+ in distributed systems.
+ Our implementation uses the techniques described in the paper to develop
+ our parallel version of the algorithm, but with modifications that make
+ more sense for working on a shared memory machine.
+ 
+\end_layout
+
+\begin_layout Standard
+The primary difference between our implementation and the method used by
+ the paper is how it transmits neighbor nodes to other threads.
+ While a thread is executing the breadth first search, it may come across
+ nodes that it does not own when searching adjacent nodes.
+ The original paper solves this problem by having each thread create lists
+ of neighboring nodes that belong to other processes and send them over
+ a network to their respective processes and wait to receive lists from
+ other processes.
+ This sending and receiving of node lists forces the processes to need to
+ wait for each other before descending into the next level.
+\end_layout
+
+\begin_layout Standard
+Our implementation uses the same general methodology of partitioning the
+ graph, but without the overhead of a network to perform on, we decided
+ that creating queues for each thread, and enqueueing nodes as they were
+ found made a lot more sense.
+ This way each thread does not have to wait for all other threads to finish
+ before searching the next depth level.
+ The tradeoff is that the path found may not be the shortest possible path
+ for to a node and the path found will depend on the scheduler.
+\end_layout
+
+\begin_layout Standard
+The algorithm starts by partitioning the graph equally between the available
+ threads.
+ All of the vertices will be assigned an ID indicating which thread is responsib
+le for searching it.
+ One node will be marked as depth zero.
+ This marks the starting node for the search, and is enqueued into the queue
+ of its owner.
+ Each thread takes the partitioned graph as input of size 
+\begin_inset Formula $n/p$
+\end_inset
+
+.
+ (Where ‘
+\begin_inset Formula $n$
+\end_inset
+
+’ is the number of vertices in the graph, and ‘
+\begin_inset Formula $p$
+\end_inset
+
+’ is the number of threads.) The algorithm works by simply dequeuing an vertex
+ 
+\begin_inset Formula $v_{1}$
+\end_inset
+
+, and enqueuing its neighbors 
+\begin_inset Formula $v'_{1}\rightarrow v'_{k}$
+\end_inset
+
+ into the local queues of the thread it belongs to.
+ This process is repeated until all queues are empty.
+ This modified version is fully illustrated as Algorithm 2.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+small
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Distributed Breadth First expansion with 1D Partitioning
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\textrm{Initialize}\ L_{v_{s}}\left(v\right)=\begin{cases}
+0, & v=v_{s},\textrm{where}\ v_{s}\ \textrm{is\ a\ source}\\
+\infty & \textrm{otherwise}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{for}\ l\ =0\ to\ \infty\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ F\ \leftarrow\ \left\{ v\mid L_{v_{s}}\left(v\right)=l\right\} ,\ \textrm{the\ set\ of\ local\ vertices\ with\ level}\ l$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{if}\ F\ =\ \emptyset\ \textrm{for\ all\ processors}\ \mathbf{then}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \textrm{Terminate\ main\ loop}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ if}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ N\ \leftarrow\ \left\{ \textrm{neighbors\ of\ vertices\ in}\ F\ \left(\textrm{not\ necessarily\ local}\right)\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{for\ all}\ \textrm{processors}\ q\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ N_{q}\ \leftarrow\ \left\{ \textrm{vertices\ in}\ N\ \textrm{owned\ by\ processor}\ q\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \mathbf{Send}\ N_{q}\ \textrm{to\ processor}\ q$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \mathbf{Receive}\ \bar{N}_{q}\ \textrm{from\ processor}\ q$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \bar{N\ }\leftarrow\ \bigcup_{q}\bar{N}_{q}\ \left(\textrm{The}\ \bar{N}_{q}\ m\textrm{ay\ overlap}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{for}\ v\ \in\bar{N}\ \textrm{and}\ L_{v_{s}}\left(v\right)\ =\ \infty\ \mathbf{do}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ L_{v_{s}}\left(v\right)\ \leftarrow\ l\ +\ 1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\mathbf{end\ for}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Modified Breadth First search with 1D Partitoning
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\footnotesize\ttfamily},tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+subgraph<Vertex>[numVerts/numThreads]
+\end_layout
+
+\begin_layout Plain Layout
+
+subgraph[k].level = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+localQueue[numThreads]
+\end_layout
+
+\begin_layout Plain Layout
+
+bfs(subGraph, threadID)
+\end_layout
+
+\begin_layout Plain Layout
+
+	finishMask |= 1 << threadID
+\end_layout
+
+\begin_layout Plain Layout
+
+	for Vertex v in subgraph
+\end_layout
+
+\begin_layout Plain Layout
+
+		v.id = threadID
+\end_layout
+
+\begin_layout Plain Layout
+
+		if (v.level = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+			localQueue[v.id] = threadID
+\end_layout
+
+\begin_layout Plain Layout
+
+	while ( finishMask != currentMask )
+\end_layout
+
+\begin_layout Plain Layout
+
+		while ( localQueue[threadID].size > 0 )
+\end_layout
+
+\begin_layout Plain Layout
+
+			srcVert = localQueue[threadID].dequeue()
+\end_layout
+
+\begin_layout Plain Layout
+
+			for Edge e in srcVert.edges()
+\end_layout
+
+\begin_layout Plain Layout
+
+				localQueue[e.dest.id].enqueue(e.dest)
+\end_layout
+
+\begin_layout Plain Layout
+
+				currentMask = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+		currentMask |= 1 << threadID
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Multi-threaded BFS (MTBFS)
+\end_layout
+
+\begin_layout Standard
+The MTBFS implementation used for reference in this paper was implemented
+ on a Cray MTA-2 multithreaded architecture (Reference paper 2).
+ Similar to our approach, the algorithm was tested against scale-free graphs.
+ When tested with a graph containing 400 million nodes, a 40 processor system
+ showed the multi-threaded algorithm to have a system speedup of about 30
+ time over the sequential implementation.
+\end_layout
+
+\begin_layout Standard
+The algorithm takes in a graph with source node s, and returns a shortest-path
+ array d such that d[v] contains the length of the shortest path from source
+ node s to destination node v, where v is a node in the graph.
+ The algorithm uses the standard approach for implementing a sequential
+ BFS where you start by adding the source node to a queue, then continue
+ looping until the queue is empty.
+ Each iteration dequeues the first node, finds it’s neighboring nodes, and
+ adds all unvisited neighbors to the queue.
+ The main difference is that looping through the queue and through the neighbori
+ng nodes is done in parallel.
+ In detail, the algorithm works as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Level-synchronized Parallel BFS
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bader:2006:DMA:1156433.1157602"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $for\ all\_v\ \in\ V\ in\ parallel\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ d\left[v\right]\ \leftarrow\ -1;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $d\left[s\right]\ \leftarrow\ 0;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Q\ \leftarrow\ \phi;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Enqueue\ s\ \leftarrow Q;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $while\ Q\ \neq\ \phi\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ for\ all\ u\ \in\ Q\ in\ parallel\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ Delete\ u\ \leftarrow\ Q;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ for\ each\ v\ adjacent\ to\ u\ in\ parallel\ do$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ if\ d\left[v\right]\ =\ -1\ then$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ \ \ \ d\left[v\right]\ \leftarrow\ d\left[u\right]\ +\ 1;$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\ \ \ \ \ \ \ \ \ \ \ \ Enqueue\ v\ \leftarrow\ Q;$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This algorithm takes full advantage of the Cray MTA-2 system’s architecture
+ by using its fine-grained parallelism and zero-overhead synchronization
+ while looping through queue and looping over each node’s set of neighbors.
+ This multi-threaded BFS technique along with the hardware architecture
+ design offer a considerable speedup advantage over any sequential implementatio
+n of BFS on graphs of similar size.
+\end_layout
+
+\begin_layout Section
+Challenges
+\end_layout
+
+\begin_layout Standard
+We have noticed that the PPBFS algorithm
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Yoo:2005:SDP:1105760.1105790"
+
+\end_inset
+
+ waits for all other threads to complete a search level before moving on
+ to the next level.
+ This places some sequential constraint on the algorithm and can potentially
+ limit performance.
+\end_layout
+
+\begin_layout Standard
+The benchmark files have been created for both Facebook and GDBench, but
+ both benchmarks produce graphs with disjoint vertices.
+ Disjoint graphs with BFS won’t allow the algorithm to visit all the nodes
+ in the graph.
+ We are currently attempting to make the graphs larger while still maintaining
+ connectivity.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Completed work:
+\end_layout
+
+\begin_layout Enumerate
+Thus far we have successfully implemented and modified the NodeXL class
+ libraries (used for scale-free graph creation) to support additional properties
+ for BFS
+\end_layout
+
+\begin_layout Enumerate
+Implemented a sequential BFS algorithm capable of running on a graph imported
+ from Facebook with NodeXL.
+\end_layout
+
+\begin_layout Enumerate
+We have also implemented a sequential version of the PPBFS Algorithm.
+\end_layout
+
+\begin_layout Subsection*
+Remaining work:
+\end_layout
+
+\begin_layout Enumerate
+Resolve disjoint sets in the benchmarks, so all vertices in the graph are
+ connected.
+\end_layout
+
+\begin_layout Enumerate
+Finish the parallelization modifications to the PPBFS Algorithm Implement
+ the MTBFS Algorithm
+\end_layout
+
+\begin_layout Enumerate
+Execute the algorithms and collect experimental results 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "C:/Bibtex/AScalableDistributedParallelBreadth-FirstSearchAlgorithm,C:/Bibtex/DesigningMultithreadedAlgorithmsForBreadthFirstSearchandStConnectivity,C:/Bibtex/ParallelBreadthFirstSearchOnDistributedMemorySystems,C:/Bibtex/ScalingTechniquesForMassiveScaleFreeGraphsInDistributedMemory,C:/Bibtex/AnalyzingSocialMediaNetworksWithNodeXL"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

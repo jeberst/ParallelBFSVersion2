@@ -51,7 +51,7 @@ namespace ParallelBFS
                 }
             }
 
-            do // Until everyone marked as finished
+            while (finishField != finishMask) // Line 4 // Until everyone marked as finished
             {
                 while (localQueue[myThreadID].Count() != 0) // Whlie there are objects in local queue
                 {
@@ -99,14 +99,11 @@ namespace ParallelBFS
                     }
                 }
 
-                if (localQueue[myThreadID].Count() == 0) // May not be needed.
+                lock (lockObject)
                 {
-                    lock (lockObject)
-                    {
-                        Interlocked.Exchange(ref finishField, finishField | 1 << myThreadID);
-                    }
-                }   
-            } while (finishField != finishMask); // Line 4
+                    Interlocked.Exchange(ref finishField, finishField | 1 << myThreadID);
+                }
+            } 
             //Console.WriteLine(myThreadID + " exiting");
         }
     }
