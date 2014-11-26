@@ -616,8 +616,14 @@ key "Yoo:2005:SDP:1105760.1105790"
 We will compare both of these algorithms with the sequential version of
  BFS across two datasets.
  One dataset will be a sufficiently large import of a Facebook social network,
- and the other a generic dataset based on internet architecture.
- 
+ and the other a generic scale free network generator GDBench 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Buluc:2011:PBS:2063384.2063471"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1384,6 +1390,247 @@ Our experimental results show that the PPBFS algorithm has a 62% improvement
 The MTBFS and LSBFS algorithms do not perform as well as the sequential
  BFS algorithm, but the performance gap narrows as the number of threads
  increases.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pgfplotsset{} 
+\backslash
+begin{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{axis}[
+\end_layout
+
+\begin_layout Plain Layout
+
+	title=Facebook Graph BFS Traversal,
+\end_layout
+
+\begin_layout Plain Layout
+
+	xtick=data,
+\end_layout
+
+\begin_layout Plain Layout
+
+	clip=false,
+\end_layout
+
+\begin_layout Plain Layout
+
+	nodes near coords,     %Adds node at top of bar indicating height
+\end_layout
+
+\begin_layout Plain Layout
+
+	xbar=6pt,              %Specifies filled bar
+\end_layout
+
+\begin_layout Plain Layout
+
+	ybar,
+\end_layout
+
+\begin_layout Plain Layout
+
+	ymin=0,                %Forces bars to snap to bottom.
+\end_layout
+
+\begin_layout Plain Layout
+
+	enlarge x limits=0.25, %Helps with spacing between bars
+\end_layout
+
+\begin_layout Plain Layout
+
+	%ybar=0pt,
+\end_layout
+
+\begin_layout Plain Layout
+
+	bar width=30pt,
+\end_layout
+
+\begin_layout Plain Layout
+
+	ylabel={Time (ms)},
+\end_layout
+
+\begin_layout Plain Layout
+
+	xlabel={Algorithm},
+\end_layout
+
+\begin_layout Plain Layout
+
+	%x tick label style={rotate=45, anchor=east},
+\end_layout
+
+\begin_layout Plain Layout
+
+	symbolic x coords={Sequential, MTBFS, LSBFS, PPBFS}
+\end_layout
+
+\begin_layout Plain Layout
+
+	]
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+addplot+[ybar] plot coordinates {(Sequential,22.4) (MTBFS,555) (LSBFS,45)
+ (PPBFS,510.2)};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{axis}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pgfplotsset{} 
+\backslash
+begin{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{axis}[
+\end_layout
+
+\begin_layout Plain Layout
+
+	title=Scale-Free Graph BFS Traversal,
+\end_layout
+
+\begin_layout Plain Layout
+
+	xtick=data,
+\end_layout
+
+\begin_layout Plain Layout
+
+	clip=false,
+\end_layout
+
+\begin_layout Plain Layout
+
+	nodes near coords,     %Adds node at top of bar indicating height
+\end_layout
+
+\begin_layout Plain Layout
+
+	xbar=6pt,              %Specifies filled bar
+\end_layout
+
+\begin_layout Plain Layout
+
+	ybar,
+\end_layout
+
+\begin_layout Plain Layout
+
+	ymin=0,                %Forces bars to snap to bottom.
+\end_layout
+
+\begin_layout Plain Layout
+
+	enlarge x limits=0.25, %Helps with spacing between bars
+\end_layout
+
+\begin_layout Plain Layout
+
+	%ybar=0pt,
+\end_layout
+
+\begin_layout Plain Layout
+
+	bar width=30pt,
+\end_layout
+
+\begin_layout Plain Layout
+
+	ylabel={Time (ms)},
+\end_layout
+
+\begin_layout Plain Layout
+
+	xlabel={Algorithm},
+\end_layout
+
+\begin_layout Plain Layout
+
+	%x tick label style={rotate=45, anchor=east},
+\end_layout
+
+\begin_layout Plain Layout
+
+	symbolic x coords={Sequential, MTBFS, LSBFS, PPBFS}
+\end_layout
+
+\begin_layout Plain Layout
+
+	]
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+addplot+[ybar] plot coordinates {(Sequential,293) (MTBFS,404.8) (LSBFS,150.8)
+ (PPBFS,631)};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{axis}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture} 
+\end_layout
+
+\end_inset
+
+
 \begin_inset ERT
 status open
 
