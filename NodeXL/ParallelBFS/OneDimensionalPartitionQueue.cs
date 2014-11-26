@@ -14,7 +14,7 @@ namespace ParallelBFS
         static int finishMask = 0;  //Return state
         static int finishField = 0; //Current status
         static ConcurrentQueue<IVertex>[] localQueue = new ConcurrentQueue<IVertex>[NUM_THREADS];
-        const uint NUM_THREADS = 8;
+        const uint NUM_THREADS = 2;
         public int numItemsEnqueued = 0;
         static object lockObject = new object();
 

@@ -12,7 +12,9 @@ namespace ParallelBFS
 {
     class Program
     {
-        const int NUM_THREADS = 8;
+        const int NUM_THREADS = 2;
+        static ParallelOptions parallelOptions = new ParallelOptions() { MaxDegreeOfParallelism = NUM_THREADS };
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -213,9 +215,9 @@ namespace ParallelBFS
             int[] distances = new int[graph.Vertices.Count*2];
 
             BlockingCollection<IVertex> queue = new BlockingCollection<IVertex>();
-            
 
-            Parallel.ForEach(graph.Vertices, vertex =>
+
+            Parallel.ForEach(graph.Vertices, parallelOptions, vertex =>
                 {
                     vertex.Visited = false;
                     distances[vertex.ID] = -1;
@@ -229,7 +231,7 @@ namespace ParallelBFS
 
                     while (queue.Count != 0)
                     {
-                         Parallel.ForEach(queue, node => parallelDequeue(queue, distances));
+                         Parallel.ForEach(queue, parallelOptions, node => parallelDequeue(queue, distances));
                     }
         }
 
@@ -249,7 +251,7 @@ namespace ParallelBFS
                     int[] sums = new int[currentNode.OutgoingEdges.Count * 2];
                     List<IEdge> edges = currentNode.OutgoingEdges.ToList();
 
-                    Parallel.ForEach(edges, edge => processEdges(edge, currentNode, queue, distances));
+                    Parallel.ForEach(edges, parallelOptions, edge => processEdges(edge, currentNode, queue, distances));
             } 
         }
 
@@ -278,35 +280,13 @@ namespace ParallelBFS
                 }
         }
 
-        private void tutorialMethod(IGraph graph)
-        {
-            Parallel.ForEach(graph.Vertices, vertex =>
-            {
-                vertex.Visited = false;
-            }
-            );
-
-            Parallel.ForEach(graph.Vertices, vertex => doWork(vertex));
-
-            Parallel.For(0, graph.Vertices.Count, delegate(int i)
-                {
-                    graph.Vertices.ElementAt(i).Visited = false;
-                });
-
-        }
-
-        private void doWork (IVertex vertex)
-        {
-            vertex.Visited = false;
-        }
-
         public static void BFSLevels(IGraph graph, IVertex root)
         {
             List<IVertex> current = new List<IVertex>();
             ConcurrentBag<IVertex> next = new ConcurrentBag<IVertex>();
             uint level = 0;
 
-            Parallel.ForEach(graph.Vertices, vertex =>
+            Parallel.ForEach(graph.Vertices, parallelOptions, vertex =>
             {
                 vertex.Visited = false;
                 vertex.Level = 0;
@@ -318,9 +298,9 @@ namespace ParallelBFS
             while (next.Where(node => (node != null && node.Level == level)).Count() > 0)
             {
                 current = next.Where(node => (node != null && node.Level == level)).ToList();
-                Parallel.ForEach(current, currentNode =>
+                Parallel.ForEach(current, parallelOptions, currentNode =>
                 {
-                    Parallel.ForEach(currentNode.OutgoingEdges, edge =>
+                    Parallel.ForEach(currentNode.OutgoingEdges, parallelOptions, edge =>
                     {
                         IVertex child = null;
                         if (currentNode != edge.Vertex2)
