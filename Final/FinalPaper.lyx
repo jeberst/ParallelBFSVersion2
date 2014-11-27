@@ -664,7 +664,7 @@ Designing Multithreaded Algorithms for Breath First search and st-connectivity
  on the Cray MTA-2
 \begin_inset CommandInset citation
 LatexCommand cite
-key "Bader:2006:DMA:1156433.1157602"
+key "DesigningMultithreadedAlgorithmsForBreadthFirstSearchandStConnectivity"
 
 \end_inset
 
@@ -1559,7 +1559,7 @@ addplot plot coordinates {(2,634) (4,458) (6,327) (8,348)}; %LSBFS
 
 	
 \backslash
-addplot plot coordinates {(2,  0) (4,185) (6,230) (8,303)}; %PPBFS
+addplot plot coordinates {(2,206) (4,185) (6,230) (8,303)}; %PPBFS
 \end_layout
 
 \begin_layout Plain Layout
@@ -1705,7 +1705,7 @@ addplot plot coordinates {(2,63) (4,45) (6,40) (8, 41)}; %LSBFS
 
 	
 \backslash
-addplot plot coordinates {(2, 0) (4,37) (6,62) (8,189)}; %PPBFS
+addplot plot coordinates {(2,17) (4,37) (6,62) (8,189)}; %PPBFS
 \end_layout
 
 \begin_layout Plain Layout
