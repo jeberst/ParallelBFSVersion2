@@ -12,7 +12,7 @@ namespace ParallelBFS
     public class OneDimensionalPartitionQueue
     {
         static int finishMask = 0;  //Return state
-        static int finishField = 0; //Current status
+        static int currentMask = 0; //Current status
         static ConcurrentQueue<IVertex>[] localQueue = new ConcurrentQueue<IVertex>[NUM_THREADS];
         const uint NUM_THREADS = 2;
         public int numItemsEnqueued = 0;
@@ -25,6 +25,7 @@ namespace ParallelBFS
         {
             //finishMask should ONLY be modifed during constuction.
             finishMask |= 1 << threadID;
+            currentMask = 0;
             //Console.WriteLine("finishMask = " + finishMask);
             this.myThreadID = threadID;
             this.subGraph = subGraph;
@@ -42,16 +43,16 @@ namespace ParallelBFS
             //Set initial list.
             foreach (IVertex v in subGraph)
             {
-                if (!v.Visited && v.Level == 0) //Line 3
+                if (v.Level == 0) //Line 3
                 {
+                    //Console.WriteLine("Enqueueing first item - " + v.threadID);
                     localQueue[v.threadID].Enqueue(v);
-                    finishField |= 1 << v.threadID;
                     Interlocked.Increment(ref numItemsEnqueued);
                     v.Visited = true;
                 }
             }
 
-            while (finishField != finishMask) // Line 4 // Until everyone marked as finished
+            while (currentMask != finishMask) // Line 4 // Until everyone marked as finished
             {
                 while (localQueue[myThreadID].Count() != 0) // Whlie there are objects in local queue
                 {
@@ -80,7 +81,7 @@ namespace ParallelBFS
                         {
                             if (destVertex.Level < sourceVertex.Level + 1 || destVertex.Level == UInt32.MaxValue)
                             {
-                                finishField = 0;
+                                currentMask = 0;
                                 destVertex.Level = sourceVertex.Level + 1;
                                 localQueue[sourceVertex.threadID].Enqueue(sourceVertex);
                                 Interlocked.Increment(ref numItemsEnqueued);
@@ -90,7 +91,7 @@ namespace ParallelBFS
                         {
                             if (destVertex.Level == UInt32.MaxValue)
                             {
-                                finishField = 0;
+                                currentMask = 0;
                                 destVertex.Level = sourceVertex.Level + 1;
                                 localQueue[destVertex.threadID].Enqueue(destVertex);
                                 Interlocked.Increment(ref numItemsEnqueued);
@@ -101,7 +102,7 @@ namespace ParallelBFS
 
                 lock (lockObject)
                 {
-                    Interlocked.Exchange(ref finishField, finishField | 1 << myThreadID);
+                    Interlocked.Exchange(ref currentMask, currentMask | 1 << myThreadID);
                 }
             } 
             //Console.WriteLine(myThreadID + " exiting");
