@@ -1414,11 +1414,10 @@ Our experiments were implemented on an Intel i7 system with 4 cores.
 \end_layout
 
 \begin_layout Standard
-Our experimental results show that the PPBFS algorithm has a 62% improvement
+Our experimental results show that the PPBFS algorithm has a 46% improvement
  over the performance of the sequential algorithm when it is executed on
- the larger scale free graph with four threads.
- The algorithm was not able to run with two threads, and the execution time
- in this case is marked as zero in our results.
+ the larger scale free graph with two threads, and a 63% improvement when
+ executed with four threads.
 \end_layout
 
 \begin_layout Standard
