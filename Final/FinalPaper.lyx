@@ -614,8 +614,19 @@ key "Yoo:2005:SDP:1105760.1105790"
 \end_layout
 
 \begin_layout Standard
-We will compare both of these algorithms with the sequential version of
- BFS across two datasets.
+The final algorithm we implemented is a level synchronous breadth-first
+ search.
+ This implementation of this algorithm forces the threads to process the
+ graph iteratively during the breadth first search.
+ The iterative nature of this algorithm ensures the same node is not visited
+ multiple times.
+ The paper uses this algorithm as part of their hybrid breadth-first search
+ solution.
+\end_layout
+
+\begin_layout Standard
+We will compare all of these algorithms with the sequential version of BFS
+ across two datasets.
  One dataset will be a sufficiently large import of a Facebook social network,
  and the other a generic dataset based on internet architecture.
 \end_layout
@@ -1336,7 +1347,7 @@ MTBS has been implemented using nested Parallel.ForEach commands on methods
  on the Cray MTA-2 as the nested parallelization limits the performance
  of the algorithm.
  The parallelization of the edges is responsible for most of the performance
- degredation as the workload of collecting adjacent edges is a relatively
+ degradation as the workload of collecting adjacent edges is a relatively
  small.
 \end_layout
 
@@ -1377,7 +1388,7 @@ The bottleneck in this algorithm comes from the fact that a finished thread
  However, another drawback of this method is that the algorithm does not
  take full advantage of breadth-first search properties.
  It would benefit from a partitioning scheme that allowed for multiple threads
- to operate on subgraphs of connected verticies.
+ to operate on subgraphs of connected vertices.
  According to the parallel exploration paper
 \begin_inset CommandInset citation
 LatexCommand cite
